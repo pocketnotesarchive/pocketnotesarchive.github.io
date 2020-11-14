@@ -1,0 +1,40 @@
+- label:
+    hu: Nyitólap
+    en: 
+  id: 0
+  href: index
+- label:
+    hu: Desktop Notes
+    en: Desktop Notes
+  id: 1
+  href: desktop_notes
+- label:
+    hu: Képek
+    en: Screenshots
+  id: 2
+  href: screenshots
+- label:
+    hu: Gépigény
+    en: System requirements
+  id: 3
+  href: requirements
+- label:
+    hu: Telepítés
+    en: Installation
+  id: 4
+  href: install
+- label:
+    hu: Fejlesztőknek
+    en: For developers
+  id: 5
+  href: developers
+- label:
+    hu: Letöltések
+    en: Downloads
+  id: 6 
+  href: download
+- label:
+    hu: Kapcsolat
+    en: Contact
+  id: 7
+  href: contact

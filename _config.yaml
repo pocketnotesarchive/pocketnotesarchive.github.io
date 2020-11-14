@@ -1,0 +1,11 @@
+# site settings
+title: Pocket Notes
+author: Ábel Sinkovics
+description: "Archive of the Pocket Notes website"
+
+# build settings
+port: 4000
+highlighter: rouge
+markdown: karmdown
+permalink: pretty
+

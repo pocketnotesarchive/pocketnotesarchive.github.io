@@ -1,0 +1,501 @@
+<p class='sima_cim'>AbelSoft Pocket Notes format</p>
+
+<p class='sima_alcim'>The header of the files</p>
+
+<p>
+  Every apn file has the same header:
+</p>
+
+<ul>
+  <li><b>1-3 bytes:</b> "APN"</li>
+  <li><b>4. byte:</b> file version number</li>
+  <li>The rest of the file: version dependent</li>
+</ul>
+
+<p>
+  Currently there are three versions of these files. Pocket Notes
+  version 0.3 can handle apn file version 1 and 2. Pocket Notes
+  version 0.4 can also handle version 3 of the apn files.
+  Every version of Pocket Notes saves the notes in the latest
+  format it can handle.
+</p>
+
+<p class='sima_alcim'>Format version 1</p>
+
+<p>
+  The goal of version 1 was to save the notes somehow, so I created
+  a simple format.
+</p>
+
+<ul>
+  <li><b>1-3 bytes:</b> "APN"</li>
+  <li><b>4. byte:</b> version number, currently 1</li>
+  <li><b>5-8. byte:</b> Nunmber of inks</li>
+  <li>The rest of the file: the list of the inks</li>
+</ul>
+
+<p>
+  The inks follow immediately each other. Each ink is stored the same way:
+</p>
+
+<ul>
+  <li><b>4 bytes:</b> Ehe width of the pen</li>
+  <li><b>1 byte:</b> The red component of the pen color</li>
+  <li><b>1 byte:</b> The green component of the pen color</li>
+  <li><b>1 byte:</b> The blue component of the pen color</li>
+  <li><b>1 byte:</b> not used, write 0.</li>
+  <li><b>4 bytes:</b> Number of vertices</li>
+  <li>List of vertices</li>
+</ul>
+
+<p>
+  The vertices follow immediately each other. Each vertex is stored the same way:
+  the x and the y coordinates, both in 4 bytes.
+</p>
+
+<p class='sima_alcim'>Format version 2 and 3</p>
+<p>
+  The structure of version 2 is the same as version 3, the difference between the two
+  is that less commands can be used in version 2. (So you can handle format
+  version 2 as version 3 file).
+</p>
+
+<ul>
+  <li><b>1-3 bytes:</b> "APN"</li>
+  <li><b>4. byte:</b> version number, 2 or 3</li>
+  <li>The rest of the file: list of commands</li>
+</ul>
+
+<p>
+The format of the commands: Each command starts with an ID byte, which is followed
+by the arguments of the command. The size of the arguments depends on the command.
+</p>
+
+<p>
+You have to use variables, which define the attributes of the currently read element.
+There are commands to change the values of the variables. At beginning of the process
+the variables have <b>default values</b>.
+</p>
+
+<p>
+Each file can have any number of Property. Each Property is a name-value pair, where the
+name and the pair can contain any characters and can be any long. There are special
+Properties.
+</p>
+
+The variables and their default values:<br />
+<table border='0' cellpadding='0' cellspacing='0' class='apn_tabla'>
+<tr>
+  <td class='apn_fejlec_cella'><b>Name of the variable</b></td>
+  <td class='apn_fejlec_cella'><b>Type</b></td>
+  <td class='apn_fejlec_cella'><b>Defined attribute</b></td>
+  <td class='apn_fejlec_cella'><b>Default value</b></td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>The color of the inks</td>
+  <td class='apn_cella'>(0, 0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen width</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>The width of the inks</td>
+  <td class='apn_cella'>4</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen marker</td>
+  <td class='apn_cella'>bool</td>
+  <td class='apn_cella'>Are the inks in marker mode or not</td>
+  <td class='apn_cella'>false</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Offset</td>
+  <td class='apn_cella'>2D pont (int, int)</td>
+  <td class='apn_cella'>The offset of the coordinates</td>
+  <td class='apn_cella'>(0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>View offset</td>
+  <td class='apn_cella'>2D pont (int, int)</td>
+  <td class='apn_cella'>The viewing offset of the editor when the document was saved</td>
+  <td class='apn_cella'>(0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Zoom</td>
+  <td class='apn_cella'>float</td>
+  <td class='apn_cella'>The zoom level in the editor when the document was saved</td>
+  <td class='apn_cella'>1.0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Paper color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>The color of the paper</td>
+  <td class='apn_cella'>(255, 255, 255)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>The color of the pattern of the paper</td>
+  <td class='apn_cella'>(0, 128, 255)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern size</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>The distance of the patterns of the paper</td>
+  <td class='apn_cella'>40</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern width</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>The line width of the patterns of the paper</td>
+  <td class='apn_cella'>1</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Paper type</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>The type of the pattern of the paper (see types at command 21)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Year</td>
+  <td class='apn_cella'>Year number (int)</td>
+  <td class='apn_cella'>The year when the elements were drawn</td>
+  <td class='apn_cella'>1960</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Month</td>
+  <td class='apn_cella'>Month number (int)</td>
+  <td class='apn_cella'>The month when the elements were drawn</td>
+  <td class='apn_cella'>1 (January)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Day</td>
+  <td class='apn_cella'>Day number (int)</td>
+  <td class='apn_cella'>The day when the elements were drawn</td>
+  <td class='apn_cella'>1</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Hour</td>
+  <td class='apn_cella'>Hour number (int)</td>
+  <td class='apn_cella'>The hour when the elements were drawn (begins with 0)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Minute</td>
+  <td class='apn_cella'>Minute number (int)</td>
+  <td class='apn_cella'>The minute when the elements were drawn (begins with 0)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+</table>
+
+<br />
+List of available commands:<br />
+<table border='0' cellpadding='0' cellspacing='0' class='apn_tabla'>
+<tr>
+  <td class='apn_fejlec_cella'><b>Command ID</b></td>
+  <td class='apn_fejlec_cella'><b>Effect</b></td>
+  <td class='apn_fejlec_cella'><b>Parameters</b></td>
+  <td class='apn_fejlec_cella'><b>From which version can you use them</b></td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>0</td>
+  <td class='apn_cella'>End of the file</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>1</td>
+  <td class='apn_cella'>Change Pen color</td>
+  <td class='apn_cella'>3 bytes: R, G, B. Unsigned integers</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>2</td>
+  <td class='apn_cella'>Set Pen color to (0, 0, 0)</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>3</td>
+  <td class='apn_cella'>Set Pen color to (128, 0, 0)</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>4</td>
+  <td class='apn_cella'>Set Pen color to (0, 128, 0)</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>5</td>
+  <td class='apn_cella'>Set Pen color to (0, 0, 128)</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>6</td>
+  <td class='apn_cella'>Set Pen color to (128, 128, 128)</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>7</td>
+  <td class='apn_cella'>Change Pen width</td>
+  <td class='apn_cella'>1 byte: the new value - 1. (So if the parameter is 0 it changes Pen width to 1)</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>8</td>
+  <td class='apn_cella'>Set Pen width to 1</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>9</td>
+  <td class='apn_cella'>Set Pen width to 2</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>10</td>
+  <td class='apn_cella'>Set Pen width to 3</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>11</td>
+  <td class='apn_cella'>Set Pen width to 4</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>12</td>
+  <td class='apn_cella'>Change Offset</td>
+  <td class='apn_cella'>2 bytes: x and y offset in 1-1 bytes, unsigned</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>13</td>
+  <td class='apn_cella'>Change Offset</td>
+  <td class='apn_cella'>4 bytes: x and y offset in 2-2 bytes, unsigned</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>14</td>
+  <td class='apn_cella'>Change Offset</td>
+  <td class='apn_cella'>8 bytes: x and y offset in 4-4 bytes, unsigned</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>15</td>
+  <td class='apn_cella'>Draw polylines</td>
+  <td class='apn_cella'>
+    Each polyline:
+    <ul>
+      <li>2 bytes: number of vertices</li>
+      <li>The vertices, each of them on 2 bytes: x and y coordinates in 1-1 byte.</li>
+    </ul>
+    They follow immediately each oter. The end of the list is a polyline with 0 vertices.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>16</td>
+  <td class='apn_cella'>Draw polylines</td>
+  <td class='apn_cella'>
+    Each polyline:
+    <ul>
+      <li>2 bytes: number of vertices</li>
+      <li>The vertices, each of them on 2 bytes: x and y coordinates in 2-2 bytes.</li>
+    </ul>
+    They follow immediately each oter. The end of the list is a polyline with 0 vertices.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>17</td>
+  <td class='apn_cella'>Draw polylines</td>
+  <td class='apn_cella'>
+    Each polyline:
+    <ul>
+      <li>2 bytes: number of vertices</li>
+      <li>The vertices, each of them on 2 bytes: x and y coordinates in 4-4 bytes.</li>
+    </ul>
+    They follow immediately each oter. The end of the list is a polyline with 0 vertices.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>18</td>
+  <td class='apn_cella'>Change Editor Offset</td>
+  <td class='apn_cella'>8 bytes: x and y offsets in 4-4 bytes, unsigned</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>19</td>
+  <td class='apn_cella'>Change Editor zoom</td>
+  <td class='apn_cella'>4 bytes long unsigned integer: the value of zoom multiplied by 65536</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>20</td>
+  <td class='apn_cella'>Set a Property</td>
+  <td class='apn_cella'>
+    <ul>
+      <li>4 bytes: The length of the name of the Property in bytes</li>
+      <li>The name of the Property</li>
+      <li>4 bytes: The length of the value of the Property in bytes</li>
+      <li>The value of the Property</li>
+    </ul>
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>21</td>
+  <td class='apn_cella'>Cahnge Paper type</td>
+  <td class='apn_cella'>
+    1 byte, which can be:
+    <ul>
+      <li><b>0</b>: Blank paper</li>
+      <li><b>1</b>: Paper with horizontal lines</li>
+      <li><b>2</b>: Paper with the same pattern as the heft of a young boy in the elementary school</li>
+      <li><b>3</b>: Chequered paper</li>
+      <li><b>4</b>: Quadrilled paper</li>
+    </ul>
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>22</td>
+  <td class='apn_cella'>Change Paper color</td>
+  <td class='apn_cella'>3 bytes: R, G and B values</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>23</td>
+  <td class='apn_cella'>Change Pattern color</td>
+  <td class='apn_cella'>3 bytes: R, G and B values</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>24</td>
+  <td class='apn_cella'>Change Pattern size</td>
+  <td class='apn_cella'>1 byte: size</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>25</td>
+  <td class='apn_cella'>Cahnge Pattern width</td>
+  <td class='apn_cella'>1 byte: size</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>26</td>
+  <td class='apn_cella'>Set Pen marker to true</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>27</td>
+  <td class='apn_cella'>Set Pen marker to false</td>
+  <td class='apn_cella'>None</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>28</td>
+  <td class='apn_cella'>Change Year</td>
+  <td class='apn_cella'>2 bytes: unsigned integer: the year number.</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>29</td>
+  <td class='apn_cella'>Change Month</td>
+  <td class='apn_cella'>1 byte: the month number (1 is January)</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>30</td>
+  <td class='apn_cella'>Change Day</td>
+  <td class='apn_cella'>1 byte: the day number</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>31..55</td>
+  <td class='apn_cella'>Change Hour</td>
+  <td class='apn_cella'>None, the command ID contains the parameter. The new value is (command ID - 31).</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>56..116</td>
+  <td class='apn_cella'>Minute értékének állítása</td>
+  <td class='apn_cella'>None, the command ID contains the parameter. The new value is (command ID - 56).</td>
+  <td class='apn_cella'>3</td>
+</tr>
+</table>
+
+<p class='sima_alcim'>About paper patterns</p>
+<p>
+  A short description about the built-in pattern types.
+</p>
+<ul>
+  <li><b>Paper with horizontal lines:</b> Horizontal lines. The distance between two lines is Pattern size * 3.</li>
+  <li><b>Paper with the same pattern as the heft of a young boy in the elementary school:</b> Horizontal lines. The distance between two lines is Pattern size. The width of every thrid line is Pattern width * 3.</li>
+  <li><b>Chequered paper:</b> Horizontal and vertical lines. The distance between them is Pattern size.</li>
+  <li><b>Quadrilled paper:</b> Horizontal and vertical lines. The horizontal distance between them is Pattern size, the vertical distance between them is Pattern size * 2.</li>
+</ul>
+
+<p style='text-align:center'>
+  <br />
+  <a href='/developers'>Return to the contents</a>
+</p>

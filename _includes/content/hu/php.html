@@ -1,0 +1,117 @@
+<p class='sima_cim'>
+  Pocket Notes fájlokat kezelõ PHP könyvtár
+</p>
+
+<p>
+  A könyvtár jelenlegi legfrissebb, 0.1-es változata az 1-es, a 2-es és a 3-as formátumú
+  fájlokat tudja kezelni.<br />
+  A könyvtár letölthetõ a <a href='/download'>Letöltések</a> résznél.
+</p>
+
+<p>
+  A könyvtár egyetlen egy fájlbók áll: <i>PocketNotes.php</i>. A könyvtár telepítése
+  annyiból áll, hogy be kell másolni ezt a fájlt abba a könyvtárba ahol a szkriptünk
+  van amibõl használni szeretnénk. Be kell tölteni minden szkriptben ahol használni
+  szeretnénk:
+</p>
+
+<p class='source_code'>
+  require_once("PocketNotes.php");
+</p>
+
+<p class='sima_alcim'>Betöltött jegyzetek formátuma</p>
+
+<p>A könyvtár egy jegyzetet egy tömbben tárol, melynek elemei szintén tömbök. Mostantól a <b>$note</b> tömb egy jegyzetet tartalmaz:</p>
+  <p style='padding-left: 20px;'><b>$note["parameters"]</b> - A jegyzet paraméterei. Ez egy tömb, elemei:</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["width"]</b>  - A jegyzet szélessége</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["height"]</b> - A jegyzet magassága</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["paper_color"]</b> - A papírlap színe</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_color"]</b> - A papír mintájának színe</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_size"]</b> - A függõleges távolság a minták között</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_width"]</b> - A vízszintes távolság a minták között</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["paper_type"]</b> - A papír típusa</p>
+  
+  <p style='padding-left: 20px;'><b>$note["properties"]</b> - A jegyzet Property-i. Ez egy tömb:</p>
+    <p style='padding-left: 40px;'>A kulcsok a Property-k nevei, az értékek a Property-k értékei.</p>
+  
+  <p style='padding-left: 20px;'><b>$note["elements"]</b>   - A jegyzet grafikus elemei (egyelõre csak tollvonások). Ez egy tömb, elemei a jegyzet grafikus elemei. Minden elem egy tömb, melynek elemei:</p>
+    <p style='padding-left: 40px;'><b>$element["type"]</b>      - Az elem típusa (egy sztring, lehetséges értékei lejjeb olvashatók)</p>
+    <p style='padding-left: 40px;'><b>$element["data"]</b>      - Típustól függõ adatok</p>
+    <p style='padding-left: 40px;'><b>$element["pen_width"]</b> - Az elem vonal vastagsága</p>
+    <p style='padding-left: 40px;'><b>$element["color"]</b>     - Az elem színe - a színek formátuma lejjebb olvasható.</p>
+    <p style='padding-left: 40px;'><b>$element["marker"]</b>    - Kijelölõ tollal rajzolták-e</p>
+    <p style='padding-left: 40px;'><b>$element["year"]</b>      - Melyik évben rajzolták az elemet</p>
+    <p style='padding-left: 40px;'><b>$element["month"]</b>     - Melyik hónapban rajzolták az elemet</p>
+    <p style='padding-left: 40px;'><b>$element["day"]</b>       - Melyik napon rajzolták az elemet</p>
+    <p style='padding-left: 40px;'><b>$element["hour"]</b>      - Melyik órában rajzolták az elemet</p>
+    <p style='padding-left: 40px;'><b>$element["minute"]</b>    - Melyik percben rajzolták az elemet</p>
+  
+  <br />
+  <p style='padding-left: 20px;'>Lehetséges elem típusok:</p>
+    <p style='padding-left: 40px;'><b>"ink"</b> - Egy tollvonás. A "data" elem egy tömb, mely tartalmazza a tollvonás ellenörzõpontjait. A "data" minden eleme egy 2D pont. A 2D pontok formátuma lejjebb olvasható.</p>
+  
+  <br />
+
+<br />
+<p class='sima_alcim'>Színek formátuma</p>
+  
+<p>Egy szín egy tömb (mostantól a <b>$color</b> egy szín):</p>
+  <p style='padding-left: 20px;'><b>$color["r"]</b> - A szín vörös komponense</p>
+  <p style='padding-left: 20px;'><b>$color["g"]</b> - A szín zöld komponense</p>
+  <p style='padding-left: 20px;'><b>$color["b"]</b> - A szín kék komponense</p>
+<p>
+  A komponensek értéke 0..255 lehet.<br />
+  Létrehozhatunk színeket az <b>apn_color($r, $g, $b)</b> függvénnyel is.
+</p>
+
+<br />
+<p class='sima_alcim'>A 2D pontok formátuma</p>
+
+<p>Minden pont egy tömb (mostantól a <b>$point</b> egy pont lesz):</p>
+  <p style='padding-left: 20px;'><b>$point["x"]</b> - Az x koordinátája a pontnak</p>
+  <p style='padding-left: 20px;'><b>$point["y"]</b> - Az y koordinátája a pontnak</p>
+  
+<p>Létrehozhatunk pontokat az <b>apn_point($x, $y)</b> függvénnyel is.</p>
+
+<br />
+<p class='sima_alcim'>Használható függvények</p>
+
+<p>function <b>apn_load_file</b>($filename)</p>
+  <p style='padding-left: 20px;'>
+    A <b>$filename</b> a betöltendõ fájl neve a helyi fájlrendszerben.
+    A függvény betölti a jegyzetet és visszatér egy tömbbel ami leírja a jegyzetet. A formátuma
+    fent olvasható, vagy egy üres tömbbel, ha hiba történt a feldolgozás során.
+  </p>
+
+<p>function <b>apn_save_file</b>($filename, $note[, $version])</p>
+  <p style='padding-left: 20px;'>
+    A <b>$filename</b> a fájl neve ahova a jegyzetet menteni fogja a függvény a helyi fájlrendszerben.
+    A <b>$version</b> paraméter elhagyható, ha nincs megadva akkor a legújabb támogatott fájl formátumot
+    fogja a könyvtár használni. A függvény logikai értékkel tér vissza, ami megmondja hogy sikeres
+    volt-e a mentés vagy sem.
+  </p>
+
+<p>function <b>apn_save_resource</b>($resource, $note[, $version])</p>
+  <p style='padding-left: 20px;'>
+    Ugynazt csinálja mint az <b>apn_save_file</b> azzal a különbséggel, hogy fájlnév helyett
+    fájl azonosítót vár (amivel pl. a <b>fopen</b> is visszatér), és a mûvelet végén nem
+    zárja le a fájlt.
+  </p>
+
+
+<p>function <b>apn_color</b>($r, $g, $b)</p>
+  <p style='padding-left: 20px;'>
+    A függvény létrehoz egy színt leíró tömböt. A <b>$r</b>, <b>$g</b>
+    és <b>$b</b> paraméterek a vörös, zöld és kék komponensei a színnek.
+  </p>
+
+<p>function <b>apn_point</b>($x, $y)</p>
+  <p style='padding-left: 20px;'>
+    Ez a függvény létrehoz egy 2D pontot leíró tömböt. A <b>$x</b>
+    és <b>$y</b> paraméterek a pont x és y koordinátái.
+  </p>
+
+<p style='text-align:center'>
+  <br />
+  <a href='/developers'>Visszatérés a témakörök listájához</a>
+</p>

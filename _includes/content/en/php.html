@@ -1,0 +1,116 @@
+<p class='sima_cim'>
+  Pocket Notes file handler PHP library
+</p>
+
+<p>
+  The latest version of this library is 0.1, it can handle apn file format version 1, 2 and 3.<br />
+  The library can be downloaded at the <a href='/download'>Downloads</a> section.
+</p>
+
+<p>
+  The library contains one file only: <i>PocketNotes.php</i>. To install it, simply copy
+  this file into the directory of the script from where you want to use it from. You have to load it
+  into every script from where you want to use it from:
+</p>
+
+<p class='source_code'>
+  require_once("PocketNotes.php");
+</p>
+
+<p class='sima_alcim'>The format of the loaded notes:</p>
+
+<p>The library stores a loaded note in an array, which array has elements which are also arrays. From now the <b>$note</b> array will be a note:</p>
+  <p style='padding-left: 20px;'><b>$note["parameters"]</b> - The parameters of the note. This is an array. It's elements are:</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["width"]</b>  - The width of the note</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["height"]</b> - The height of the note</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["paper_color"]</b> - The color of the paper</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_color"]</b> - The color of the patterns</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_size"]</b> - The vertical distance of the patterns</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["pattern_width"]</b> - The horizontal distance of the patterns</p>
+    <p style='padding-left: 40px;'><b>$note["parameters"]["paper_type"]</b> - The type of the paper</p>
+  
+  <p style='padding-left: 20px;'><b>$note["properties"]</b> - The Properties of the note. This is an array.</p>
+    <p style='padding-left: 40px;'>The keys of the array are the Property names, the values are the Property values.</p>
+  
+  <p style='padding-left: 20px;'><b>$note["elements"]</b>   - Draw elements of the note (currently only inks). This is an array, the elements are the graphic elements of the note. Each element is an array, it's elements are:</p>
+    <p style='padding-left: 40px;'><b>$element["type"]</b>      - The type of the element (a string, see possible values below)</p>
+    <p style='padding-left: 40px;'><b>$element["data"]</b>      - The type specific data of the element</p>
+    <p style='padding-left: 40px;'><b>$element["pen_width"]</b> - The line-width of the element</p>
+    <p style='padding-left: 40px;'><b>$element["color"]</b>     - The color of the element. See color format below</p>
+    <p style='padding-left: 40px;'><b>$element["marker"]</b>    - Was it drawn with a marker pen or not</p>
+    <p style='padding-left: 40px;'><b>$element["year"]</b>      - The year the element was drawn</p>
+    <p style='padding-left: 40px;'><b>$element["month"]</b>     - The month the element was drawn</p>
+    <p style='padding-left: 40px;'><b>$element["day"]</b>       - The day the element was drawn</p>
+    <p style='padding-left: 40px;'><b>$element["hour"]</b>      - The hour the element was drawn</p>
+    <p style='padding-left: 40px;'><b>$element["minute"]</b>    - The minute the element was drawn</p>
+  
+  <br />
+  <p style='padding-left: 20px;'>Possible element types:</p>
+    <p style='padding-left: 40px;'><b>"ink"</b> - An ink. The "data" part is an array, which contains the control points of the ink. Each element of the "data" array is 2D point. See 2D point format below.</p>
+  
+  <br />
+
+<br />
+<p class='sima_alcim'>Format of the colors</p>
+  
+<p>A color is an array (from now <b>$color</b> will be a color):</p>
+  <p style='padding-left: 20px;'><b>$color["r"]</b> - The red component of the color</p>
+  <p style='padding-left: 20px;'><b>$color["g"]</b> - The green component of the color</p>
+  <p style='padding-left: 20px;'><b>$color["b"]</b> - The blue component of the color</p>
+<p>
+  The components can be 0..255.<br />
+  You can create a color with the <b>apn_color($r, $g, $b)</b> function.
+</p>
+
+<br />
+<p class='sima_alcim'>Format of the 2D points</p>
+
+<p>A point is an array (from now <b>$point</b> will be a point):</p>
+  <p style='padding-left: 20px;'><b>$point["x"]</b> - The x coordinate of the point</p>
+  <p style='padding-left: 20px;'><b>$point["y"]</b> - The y coordinate of the point</p>
+  
+<p>You can create a point with the <b>apn_point($x, $y)</b> function.</p>
+
+<br />
+<p class='sima_alcim'>Available functions</p>
+
+<p>function <b>apn_load_file</b>($filename)</p>
+  <p style='padding-left: 20px;'>
+    The <b>$filename</b> is the name of the file to load in the local filesystem.
+    The function loads the note and returns an array described above, or an empty
+    array if there was an error.
+  </p>
+
+<p>function <b>apn_save_file</b>($filename, $note[, $version])</p>
+  <p style='padding-left: 20px;'>
+    The <b>$filename</b> is the name of the file to save the note in $note to in the local filesystem.
+    The $version parameter is optional, if it is not set, the latest supported version will be
+    used.
+    The functions returns a boolean value which is true if saving was successful.
+  </p>
+
+<p>function <b>apn_save_resource</b>($resource, $note[, $version])</p>
+  <p style='padding-left: 20px;'>
+    The same as <b>apn_save_file</b>. The difference is that it takes a file handler (eg. the
+    return value of a <b>fopen</b> call) instead of a file name, and it doesn't close this
+    file at the end.
+  </p>
+
+<p>function <b>apn_color</b>($r, $g, $b)</p>
+  <p style='padding-left: 20px;'>
+    The function creates a color array described above. The <b>$r</b>, <b>$g</b>
+    and <b>$b</b> parameters are the red, green and blue components of the color.
+  </p>
+
+<p>function <b>apn_point</b>($x, $y)</p>
+  <p style='padding-left: 20px;'>
+    The function creates a 2D point array described above. The <b>$x</b>
+    and <b>$y</b> parameters are the x and y coordinates of the point.
+  </p>
+
+<br />
+
+<p style='text-align:center'>
+  <br />
+  <a href='/developers'>Return to the contents</a>
+</p>

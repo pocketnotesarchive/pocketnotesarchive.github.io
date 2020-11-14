@@ -1,0 +1,145 @@
+- name: wallpapers
+  cover: pnw640.jpg
+  title:
+    hu: Háttérképek
+    en: Wallpapers
+  width: 145.6
+  height: 109.2
+  content:
+    - title:
+        hu: 1024 x 768
+        en: 1024 x 768
+      img: pnw1024.jpg
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: 800 x 600
+        en: 800 x 600
+      img: pnw800.jpg
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: 640 x 480
+        en: 640 x 480
+      img: pnw640.jpg
+      width: 145.6
+      height: 109.2
+- name: "0_4"
+  cover: Pn5.png
+  title:
+    hu: Pocket Notes 0.4
+    en: Pocket Notes 0.4
+  width: 81.9
+  height: 109.2
+  content:
+    - title:
+        hu: "Be lehet állítani a toll tulajdonságait"
+        en: "You can change the parameters of the pen"
+      img: Pn1.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Egyik barátom rajzolt rózsát"
+        en: "A friend of mine has drawn a rose"
+      img: Pn7.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Virtuális füzet"
+        en: "Virtual exercise book"
+      img: Pn2.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Egyik barátom rajzolt kockát"
+        en: "A friend of mine has drawn a box"
+      img: Pn8.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Pocket Notes :)"
+        en: "Pocket Notes :)"
+      img: Pn4.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Nem csak írni, rajzolni is lehet"
+        en: "You can also draw things"
+      img: Pn6.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Négyzetrácsos papírt is használhatunk"
+        en: "You can also use chequered paper"
+      img: Pn3.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Használhatunk kiemelő filcet"
+        en: "You can use marker pen"
+      img: Pn5.png
+      width: 81.9
+      height: 109.2
+    - title:
+        hu: "Függvények ábrázolásakor jól jönnek a színek"
+        en: "Colors are helpful when you draw functions"
+      img: Pn9.png
+      width: 81.9
+      height: 109.2
+- name: dn
+  cover: pn10211.png
+  title:
+    hu: Desktop Notes
+    en: Desktop Notes
+  width: 145.6
+  height: 109.2
+  content:
+    - title:
+        hu: "Számolás megjelenítése a PC-n"
+        en: "Display calculation on a PC"
+      img: pn1025.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "A legfontosabb jegyzet :)"
+        en: "The most important note :)"
+      img: pn1027.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "A rózsa"
+        en: "The rose"
+      img: pn10210.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "A program tud magyarul is"
+        en: "The program supports Hungarian language"
+      img: pn10212.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "Lehet nagyítani és kicsinyíteni"
+        en: "You can change the zoom level"
+      img: pn1029.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "A program névjegye"
+        en: "The about window of the program"
+      img: pn10211.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "Függvények ábrázolása"
+        en: "Display functions"
+      img: pn1026.png
+      width: 145.6
+      height: 109.2
+    - title:
+        hu: "Szépen megjelennek a papír minták is"
+        en: "The paper patterns also appear correctly"
+      img: pn1028.png
+      width: 145.6
+      height: 109.2
+

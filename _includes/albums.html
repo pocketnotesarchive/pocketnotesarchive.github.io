@@ -1,0 +1,22 @@
+<p class='sima_cim'>
+{{include.title}}
+</p>
+
+<table cellspacing='10px' cellpadding='0' border='0' align='center'>
+<tr>
+  {% for item in site.data.screenshots %}
+    <td width='182px' class='photo_frame' style='height:192px; background-image:url("/images/albums/screenshot/frame.png");'><table align='center' cellspacing='0' cellpadding='0' border='0'>
+      <tr>
+        <td style='text-align:center'><a href='/{{item.name}}'><img class='photo_in_frame' src='/images/albums/screenshot/{{item.name}}/thumbs/{{item.cover}}' alt='' width='{{item.width}}px' height='{{item.height}}px' /></a></td>
+      </tr>
+      <tr style='height:10px'>
+        <td><img src='/images/nothing.gif' alt='' /></td>
+      </tr>
+  
+      <tr>
+        <td style='text-align:center'><a href='/{{item.name}}' class='album_cim'>{{item.title[include.lang]}}</a></td>
+      </tr>
+    </table></td>
+  {% endfor %}
+</tr>
+</table>

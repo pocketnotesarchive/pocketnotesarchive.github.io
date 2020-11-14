@@ -1,0 +1,508 @@
+<p class='sima_cim'>AbelSoft Pocket Notes formátum</p>
+
+<p class='sima_alcim'>A fájlok fejléce</p>
+
+<p>
+  Minden apn fájl azonos módon kezdõdik:
+</p>
+
+<ul>
+  <li><b>1-3 byte:</b> "APN"</li>
+  <li><b>4. byte:</b> verziószám</li>
+  <li>A file további része: verzió függõ</li>
+</ul>
+
+<p>
+  Jelenleg három verziója létezik a fájloknak, melyek részletei itt
+  megtalálhatók. A 0.3-as változata a programnak az 1-es és 2-es,
+  a 0.4-es változat pedig az 1-es, 2-es és 3-as formátumokat is kezeli.
+  Minden változat az általa ismert legfrissebb formátumban menti a
+  jegyzeteket.
+</p>
+
+<p class='sima_alcim'>1-es formátum</p>
+
+<p>
+  A legelsõ változat készítésekor arra törekedtem hogy valamilyen
+  formában el tudjam menteni a jegyzeteket, ezért hoztam létre ezt
+  az egyszerû és könnyen feldolgozható fájlformátumot. Leginkább csak
+  a teljesség kedvéért került ide.
+</p>
+
+<ul>
+  <li><b>1-3 byte:</b> "APN"</li>
+  <li><b>4. byte:</b> verziószám, most 1</li>
+  <li><b>5-8. byte:</b> Tollvonások száma</li>
+  <li>A file további része: tollvonások listája</li>
+</ul>
+
+<p>
+  A tollvonások közvetlenül követik egymást. Minden tollvonás a következõ
+  módon van tárolva:
+</p>
+
+<ul>
+  <li><b>4 db byte:</b> Toll vastagsága</li>
+  <li><b>1 db byte:</b> Toll színének vörös komponense</li>
+  <li><b>1 db byte:</b> Toll színének zöld komponense</li>
+  <li><b>1 db byte:</b> Toll színének kék komponense</li>
+  <li><b>1 db byte:</b> nem használt, 0-át kell ide írni.</li>
+  <li><b>4 db byte:</b> Csúcspontok száma</li>
+  <li>Csúcspontok listája</li>
+</ul>
+
+<p>
+  A csúcspontok közvetlenül követik egymást. Minden csúcspontot két 4 bytesos
+  egész szám ír le: x és y koordinátája.
+</p>
+
+<p class='sima_alcim'>2-es és 3-as formátum</p>
+<p>
+  A 2-es verziójú fájlok felépítése megegyezik a 3-assal, annyi a
+  különbség, hogy kevesebb parancsot lehet bennük használni (tehát
+  nyugodtan tekinthetjük õket 3-as verziójú fájloknak a feldolgozás
+  során).
+</p>
+
+<ul>
+  <li><b>1-3 byte:</b> "APN"</li>
+  <li><b>4. byte:</b> verziószám, 2 vagy 3</li>
+  <li>A file további része: parancsok listája</li>
+</ul>
+
+<p>
+A parancsok formája: Minden parancs egy egy bájtos azonosítóval kezdõdik, melyet
+közvetlenül követnek a parancs paraméterei. Ezek mérete változó, a parancstól függ.
+</p>
+
+<p>
+A fájlok beolvasása során használni kell változókat is, melyek meghatározzák az éppen
+beolvasott elemek tulajdonságait. A változók értékének megváltoztatására vannak
+parancsok. Az elsõ ilyen parancs elõtt a változók kapnak <b>alapértelmezett értéket</b>.
+</p>
+
+<p>
+A fájlok rendelkezhetnek tetszõleges számú Property-vel. Egy Property egy név-érték páros,
+ahol mind a név, mind az érték tetszõleges hosszúságú byte sorozat lehet. Vannak kiemelt
+Property-k.
+</p>
+
+A változók és alapértelmezett értékeik:<br />
+<table border='0' cellpadding='0' cellspacing='0' class='apn_tabla'>
+<tr>
+  <td class='apn_fejlec_cella'><b>Változó neve</b></td>
+  <td class='apn_fejlec_cella'><b>Típusa</b></td>
+  <td class='apn_fejlec_cella'><b>Mit határoz meg</b></td>
+  <td class='apn_fejlec_cella'><b>Alapértelmezett értéke</b></td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>A vonalak színe</td>
+  <td class='apn_cella'>(0, 0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen width</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>A vonalak vastagsága</td>
+  <td class='apn_cella'>4</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pen marker</td>
+  <td class='apn_cella'>bool</td>
+  <td class='apn_cella'>Kijelölõ módúak-e a vonalak</td>
+  <td class='apn_cella'>false</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Offset</td>
+  <td class='apn_cella'>2D pont (int, int)</td>
+  <td class='apn_cella'>A vonalak koordinátáinak eltolása</td>
+  <td class='apn_cella'>(0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>View offset</td>
+  <td class='apn_cella'>2D pont (int, int)</td>
+  <td class='apn_cella'>A szerkesztõben az ábra eltolása a mentés pillanatában</td>
+  <td class='apn_cella'>(0, 0)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Zoom</td>
+  <td class='apn_cella'>float</td>
+  <td class='apn_cella'>A szerkesztõben a nagyítás a mentés pillanatában</td>
+  <td class='apn_cella'>1.0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Paper color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>A papírlap színe</td>
+  <td class='apn_cella'>(255, 255, 255)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern color</td>
+  <td class='apn_cella'>RGB (int, int, int)</td>
+  <td class='apn_cella'>A papír mintázatának színe</td>
+  <td class='apn_cella'>(0, 128, 255)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern size</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>A papír mintázatának köze</td>
+  <td class='apn_cella'>40</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Pattern width</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>Papír mintázat vonalvastagsága</td>
+  <td class='apn_cella'>1</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Paper type</td>
+  <td class='apn_cella'>int</td>
+  <td class='apn_cella'>A papír mintázatának típusa (a mintázat típusok a 21-es parancsnál vannak)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Year</td>
+  <td class='apn_cella'>Évszám (int)</td>
+  <td class='apn_cella'>Melyik évben rajzolták az alakzatot</td>
+  <td class='apn_cella'>1960</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Month</td>
+  <td class='apn_cella'>Hónap (int)</td>
+  <td class='apn_cella'>Melyik hónapban rajzolták az alakzatot</td>
+  <td class='apn_cella'>1 (január)</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Day</td>
+  <td class='apn_cella'>Nap (int)</td>
+  <td class='apn_cella'>A hónap hányadik napján rajzolták az alakzatot</td>
+  <td class='apn_cella'>1</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Hour</td>
+  <td class='apn_cella'>Óra (int)</td>
+  <td class='apn_cella'>A nap hányadik órájában rajzolták az alakzatot (0-tól számol)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>Minute</td>
+  <td class='apn_cella'>Perc (int)</td>
+  <td class='apn_cella'>A nap hányadik percében rajzolták az alakzatot (0-tól számol)</td>
+  <td class='apn_cella'>0</td>
+</tr>
+</table>
+
+<br />
+A használható parancsok listája:<br />
+<table border='0' cellpadding='0' cellspacing='0' class='apn_tabla'>
+<tr>
+  <td class='apn_fejlec_cella'><b>Parancs azonosítója</b></td>
+  <td class='apn_fejlec_cella'><b>Hatása</b></td>
+  <td class='apn_fejlec_cella'><b>Paraméterei</b></td>
+  <td class='apn_fejlec_cella'><b>Hányas verziótól kezdve lehet használni</b></td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>0</td>
+  <td class='apn_cella'>File feldolgozásának a vége</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>1</td>
+  <td class='apn_cella'>Pen color megváltoztatása</td>
+  <td class='apn_cella'>3 byte: R, G, B. Elõjel nélküli egészek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>2</td>
+  <td class='apn_cella'>Pen color (0, 0, 0)-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>3</td>
+  <td class='apn_cella'>Pen color (128, 0, 0)-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>4</td>
+  <td class='apn_cella'>Pen color (0, 128, 0)-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>5</td>
+  <td class='apn_cella'>Pen color (0, 0, 128)-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>6</td>
+  <td class='apn_cella'>Pen color (128, 128, 128)-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>7</td>
+  <td class='apn_cella'>Pen width módosítása</td>
+  <td class='apn_cella'>1 byte: az új érték - 1. (Vagyis a 0 paraméter 1-re állítja a pen-width-et)</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>8</td>
+  <td class='apn_cella'>Pen width 1-re állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>9</td>
+  <td class='apn_cella'>Pen width 2-re állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>10</td>
+  <td class='apn_cella'>Pen width 3-ra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>11</td>
+  <td class='apn_cella'>Pen width 4-re állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>12</td>
+  <td class='apn_cella'>Offset értékének állítása</td>
+  <td class='apn_cella'>2 byte: x és y eltolások 1-1 byteon, elõjel nélkül</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>13</td>
+  <td class='apn_cella'>Offset értékének állítása</td>
+  <td class='apn_cella'>4 byte: x és y eltolások 2-2 byteon, elõjel nélkül</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>14</td>
+  <td class='apn_cella'>Offset értékének állítása</td>
+  <td class='apn_cella'>8 byte: x és y eltolások 4-4 byteon, elõjel nélkül</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>15</td>
+  <td class='apn_cella'>Szabadkézi vonalak rajzolása</td>
+  <td class='apn_cella'>
+    Minden vonal:
+    <ul>
+      <li>2 byte: csúcspontok száma</li>
+      <li>A csúcspontok, egyenként 2 byteon: x és y koordináták 1-1 byteon.</li>
+    </ul>
+    A vonalak közvetlenül követik egymást. A lista végét egy 0 csúcspontból álló vonal
+    jelzi.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>16</td>
+  <td class='apn_cella'>Szabadkézi vonalak rajzolása</td>
+  <td class='apn_cella'>
+    Minden vonal:
+    <ul>
+      <li>2 byte: csúcspontok száma</li>
+      <li>A csúcspontok, egyenként 4 byteon: x és y koordináták 2-2 byteon.</li>
+    </ul>
+    A vonalak közvetlenül követik egymást. A lista végét egy 0 csúcspontból álló vonal
+    jelzi.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>17</td>
+  <td class='apn_cella'>Szabadkézi vonalak rajzolása</td>
+  <td class='apn_cella'>
+    Minden vonal:
+    <ul>
+      <li>2 byte: csúcspontok száma</li>
+      <li>A csúcspontok, egyenként 8 byteon: x és y koordináták 4-4 byteon.</li>
+    </ul>
+    A vonalak közvetlenül követik egymást. A lista végét egy 0 csúcspontból álló vonal
+    jelzi.
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>18</td>
+  <td class='apn_cella'>Editor Offset értékének állítása</td>
+  <td class='apn_cella'>8 byte: x és y eltolások 4-4 byteon, elõjel nélkül</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>19</td>
+  <td class='apn_cella'>Editor zoom értékének állítása</td>
+  <td class='apn_cella'>4 byteos elõjel nélküli egész: a zoom érték 65536-szorosa</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>20</td>
+  <td class='apn_cella'>Egy Property meghatározása</td>
+  <td class='apn_cella'>
+    <ul>
+      <li>4 byte: Property nevének hossza byteban</li>
+      <li>Property neve</li>
+      <li>4 byte: Property értékének hossza byteban</li>
+      <li>Property értéke</li>
+    </ul>
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>21</td>
+  <td class='apn_cella'>Paper type értékének állítása</td>
+  <td class='apn_cella'>
+    1 byte, melynek értéke lehet:
+    <ul>
+      <li><b>0</b>: Üres papír</li>
+      <li><b>1</b>: Vízszintesen vonalas papír</li>
+      <li><b>2</b>: Általános iskolás írni tanuló minta</li>
+      <li><b>3</b>: Négyzetrácsos papír</li>
+      <li><b>4</b>: Francia kockás papír</li>
+    </ul>
+  </td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>22</td>
+  <td class='apn_cella'>Paper color értékének állítása</td>
+  <td class='apn_cella'>3 byte: R, G és B értéke</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>23</td>
+  <td class='apn_cella'>Pattern color értékének állítása</td>
+  <td class='apn_cella'>3 byte: R, G és B értéke</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>24</td>
+  <td class='apn_cella'>Pattern size értékének állítása</td>
+  <td class='apn_cella'>1 byte: méret</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>25</td>
+  <td class='apn_cella'>Pattern width értékének állítása</td>
+  <td class='apn_cella'>1 byte: méret</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>26</td>
+  <td class='apn_cella'>Pen marker igazra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>27</td>
+  <td class='apn_cella'>Pen marker hamisra állítása</td>
+  <td class='apn_cella'>Nincsenek</td>
+  <td class='apn_cella'>2</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>28</td>
+  <td class='apn_cella'>Year értékének állítása</td>
+  <td class='apn_cella'>2 byte: elõjel nélküli egész: az évszám.</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>29</td>
+  <td class='apn_cella'>Month értékének állítása</td>
+  <td class='apn_cella'>1 byte: a hónap (1 - január)</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>30</td>
+  <td class='apn_cella'>Day értékének állítása</td>
+  <td class='apn_cella'>1 byte: a nap</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>31..55</td>
+  <td class='apn_cella'>Hour értékének állítása</td>
+  <td class='apn_cella'>Nincs, a parancs kódja tartalmazza a paramétert is. Az új érték: parancs kód - 31 lesz.</td>
+  <td class='apn_cella'>3</td>
+</tr>
+
+<tr>
+  <td class='apn_cella'>56..116</td>
+  <td class='apn_cella'>Minute értékének állítása</td>
+  <td class='apn_cella'>Nincs, a parancs kódja tartalmazza a paramétert is. Az új érték: parancs kód - 56 lesz.</td>
+  <td class='apn_cella'>3</td>
+</tr>
+</table>
+
+<p class='sima_alcim'>A papír mintázatokról</p>
+<p>
+  Egy rövid és lényegretörõ ismertetõ a beépített papírmintázatokról.
+</p>
+<ul>
+  <li><b>Vízszintesen vonalas papír:</b> Vízszintes vonalak Pattern size * 3 távolságra egymástól.</li>
+  <li><b>Általános iskolás írni tanuló minta:</b> Vízszintes vonalak Pattern size távolságra egymástól. Minden harmadiknak a vastagsága Pattern width * 3.</li>
+  <li><b>Négyzetrácsos papír:</b> Vízszintes és függõleges vonalak, egymástól Pattern width távolságra</li>
+  <li><b>Francia kockás papír:</b> Vízszintes és függõleges vonalak, vízszintesen egymástól Pattern width, függõlegesen Pattern width * 2 távolságra.</li>
+</ul>
+
+<p style='text-align:center'>
+  <br />
+  <a href='/developers'>Visszatérés a témakörök listájához</a>
+</p>

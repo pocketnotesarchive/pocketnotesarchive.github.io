@@ -1,0 +1,133 @@
+<p class='sima_cim'>
+{{include.title}}
+</p>
+
+<script type="text/javascript"><!--
+  function jump_to_image(n)
+  {
+    {% for lang in site.data.lang %}
+      document.getElementById("img{{ lang.id }}0").style.display =
+        n == 0 ? "block" : "none";
+    {% endfor %}
+
+    {% for album in site.data.screenshots %}
+      {% if album.name == include.album %}
+        {% for item in album.content %}
+          {% assign index = forloop.index %}
+          {% for lang in site.data.lang %}
+            document.getElementById("img{{ lang.id }}{{ index }}").style.display =
+              n == {{ index }} ? "block" : "none";
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  }
+--></script>
+
+<div id='img{{ include.lang }}0'>
+  <table cellspacing='10px' cellpadding='0' border='0' align='center'>
+  <tr>
+    {% for album in site.data.screenshots %}
+      {% if album.name == include.album %}
+        {% for item in album.content %}
+          {% assign mod = forloop.index | modulo: 3 %}
+          {% if forloop.index > 3 and mod == 1 %}
+            </tr>
+            <tr>
+          {% endif %}
+  
+          <td width='182px' class='photo_frame' style='height:192px; background-image:url("/images/albums/screenshot/frame.png");'><table align='center' cellspacing='0' cellpadding='0' border='0'>
+            <tr>
+              <td style='text-align:center'><img onclick='jump_to_image({{ forloop.index }})' class='photo_in_frame' style='cursor:pointer;' src='/images/albums/screenshot/{{include.album}}/thumbs/{{item.img}}' alt='' width='{{item.width}}px' height='{{item.height}}px' /></td>
+            </tr>
+            <tr style='height:10px'>
+              <td><img src='/images/nothing.gif' alt='' /></td>
+            </tr>
+        
+            <tr>
+              <td style='text-align:center'><a class='album_cim' onclick='jump_to_image({{ forloop.index }})' style='cursor:pointer; color:blue;'>{{item.title[include.lang]}}</a></td>
+            </tr>
+          </table></td>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </tr>
+  </table>
+  
+  <p style='text-align:center'>
+    <br />
+    <a href='/screenshots'>
+      {% if include.lang == "hu" %}Visszatérés az albumok listájához
+      {% else %}Return to the list of the albums
+      {% endif %}
+    </a>
+  </p>
+</div>
+
+{% for album in site.data.screenshots %}
+  {% if album.name == include.album %}
+    {% for item in album.content %}
+      {% assign prev = forloop.index | minus: 1 %}
+      {% assign next = forloop.index | plus: 1 %}
+
+      <div id='img{{ include.lang }}{{ forloop.index }}' style='display:none;'>
+        <table width='100%' cellspacing='0' cellpadding='0' border='0' align='center'>
+        <tr>
+          <td style='vertical-align:center; width:40px;'>
+            {% if prev > 0 %}
+              <img onclick='jump_to_image({{ prev }})' src='/images/bal_nyil.gif' alt='' style='border-width:0px; cursor:pointer; ' />
+            {% else %}
+              &nbsp;
+            {% endif %}
+          </td>
+          
+          <td style='text-align:center'>
+            <a id='ide_ugorj' href='/images/albums/screenshot/{{include.album}}/images/{{item.img}}' target='kep_nagyobban'>
+            {% assign width = item.width | times: 3 %}
+            {% assign height = item.height | times: 3 %}
+            <img src='/images/albums/screenshot/{{include.album}}/images/{{item.img}}' alt='' width='{{ width }}' height='{{ height }}'
+              class='photo_alone'
+            />
+            </a>
+          </td>
+          
+          <td style='vertical-align:center; width:40px;'>
+            {% if next <= album.content.size %}
+              <img onclick='jump_to_image({{ next }})' src='/images/jobb_nyil.gif' alt='' style='border-width:0px; cursor:pointer; ' />
+            {% else %}
+              &nbsp;
+            {% endif %}
+          </td>
+          
+        </tr>
+        </table>
+
+        <p style='
+          text-align:center;
+          
+          font-size: 24px;
+          color: #000080;
+          font-weight: bold;
+        '>{{item.title[include.lang]}}</p>
+        
+        <p style='text-align:center'>
+          {% if include.lang == "hu" %}
+            A képre kattintva megjelenik nagyobban is.
+          {% else %}
+            Click on the image to see it in it's original size. 
+          {% endif %}
+          <br />
+          <br />
+          <a onclick='jump_to_image(0)' style='color:blue; cursor:pointer;' >
+            {% if include.lang == "hu" %}
+              Visszatérés az összesítő oldalra
+            {% else %}
+              Return to the index of the pictures
+            {% endif %}
+          </a>
+        </p>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
